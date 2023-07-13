@@ -1,4 +1,4 @@
-package com.krisna31.story_app_android.ui.main
+package com.krisna31.story_app_android.ui.detail_story
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,7 +12,7 @@ import com.krisna31.story_app_android.data.user.UserModel
 import com.krisna31.story_app_android.data.user.UserPreference
 import kotlinx.coroutines.launch
 
-class MainViewModel(private val pref: UserPreference) : ViewModel() {
+class DetailStoryViewModel(private val pref: UserPreference) : ViewModel() {
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading

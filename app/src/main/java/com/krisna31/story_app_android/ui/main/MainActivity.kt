@@ -1,16 +1,17 @@
 package com.krisna31.story_app_android.ui.main
 
-import android.animation.AnimatorSet
-import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.krisna31.story_app_android.R
 import com.krisna31.story_app_android.data.user.UserPreference
 import com.krisna31.story_app_android.databinding.ActivityMainBinding
@@ -30,12 +31,15 @@ class MainActivity : AppCompatActivity() {
 
         setupView()
         setupViewModel()
-        setupAction()
-        playAnimation()
     }
 
     private fun setupView() {
         supportActionBar?.title = getString(R.string.main_app_name)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        val layoutManager = LinearLayoutManager(this)
+        binding.rvStory.layoutManager = layoutManager
+        val itemDecoration = DividerItemDecoration(this, layoutManager.orientation)
+        binding.rvStory.addItemDecoration(itemDecoration)
     }
 
     private fun setupViewModel() {
@@ -46,8 +50,12 @@ class MainActivity : AppCompatActivity() {
 
         mainViewModel.getUser().observe(this) { user ->
             if (user.apiToken.isNotEmpty() || user.apiToken != "") {
-                binding.nameTextView.text = getString(R.string.greeting, user.name)
-
+                mainViewModel.getStories()
+                mainViewModel.story.observe(this) { story ->
+                    val adapter = MainAdapter()
+                    adapter.submitList(story)
+                    binding.rvStory.adapter = adapter
+                }
             } else {
                 startActivity(Intent(this, WelcomeActivity::class.java))
                 finish()
@@ -55,32 +63,23 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupAction() {
-        binding.logoutButton.setOnClickListener {
-            mainViewModel.logout()
-        }
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_act_items, menu)
+        return true
     }
 
-    private fun playAnimation() {
-        ObjectAnimator.ofFloat(binding.imageView, View.TRANSLATION_X, -30f, 30f).apply {
-            duration = 5000
-            repeatCount = ObjectAnimator.INFINITE
-            repeatMode = ObjectAnimator.REVERSE
-        }.start()
-        ObjectAnimator.ofFloat(binding.imageView, View.TRANSLATION_Y, -10f, 10f).apply {
-            duration = 4000
-            repeatCount = ObjectAnimator.INFINITE
-            repeatMode = ObjectAnimator.REVERSE
-        }.start()
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.logoutButton -> {
+                mainViewModel.logout()
+                startActivity(Intent(this, WelcomeActivity::class.java))
+                finish()
+                return true
+            }
 
-        val name = ObjectAnimator.ofFloat(binding.nameTextView, View.ALPHA, 1f).setDuration(500)
-        val message =
-            ObjectAnimator.ofFloat(binding.messageTextView, View.ALPHA, 1f).setDuration(500)
-        val logout = ObjectAnimator.ofFloat(binding.logoutButton, View.ALPHA, 1f).setDuration(500)
-
-        AnimatorSet().apply {
-            playSequentially(name, message, logout)
-            startDelay = 500
-        }.start()
+            else -> {
+                return super.onOptionsItemSelected(item)
+            }
+        }
     }
 }
