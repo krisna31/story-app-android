@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Story App Android</string>
+    <string name="main_app_name">Dicoding Stories</string>
     <string name="signup">Daftar</string>
     <string name="login">Masuk</string>
     <string name="message_welcome_page">Sudah siap untuk membuat cerita singkat pertamamu? Di Storykelah!</string>
@@ -15,4 +16,6 @@
     <string name="greeting">Halo %1$s,</string>
     <string name="logout">Keluar</string>
     <string name="login_desc">Login Image</string>
+    <string name="logout_from_app">Logout From App</string>
+    <string name="add_story">Add Story</string>
 </resources>

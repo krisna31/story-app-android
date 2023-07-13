@@ -2,10 +2,8 @@ package com.krisna31.story_app_android.data.api.config
 
 import com.krisna31.story_app_android.data.api.response.LoginResponse
 import com.krisna31.story_app_android.data.api.response.RegisterResponse
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
+import com.krisna31.story_app_android.data.api.response.StoryResponse
 import retrofit2.Call
-import retrofit2.http.Multipart
 import retrofit2.http.*
 
 interface ApiService {
@@ -30,4 +28,9 @@ interface ApiService {
         @Field("email") username: String,
         @Field("password") password: String,
     ): Call<LoginResponse>
+
+    @GET("stories")
+    fun getStories(
+        @Header("Authorization") token: String,
+    ): Call<StoryResponse>
 }

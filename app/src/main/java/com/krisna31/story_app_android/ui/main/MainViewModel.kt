@@ -19,4 +19,8 @@ class MainViewModel(private val pref: UserPreference) : ViewModel() {
         }
     }
 
+    fun getApiToken(): LiveData<String> {
+        return pref.getApiToken().asLiveData()
+    }
+
 }
