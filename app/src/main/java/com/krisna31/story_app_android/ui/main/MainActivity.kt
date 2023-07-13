@@ -5,11 +5,11 @@ import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
+import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
@@ -56,14 +56,14 @@ class MainActivity : AppCompatActivity() {
             ViewModelFactory(UserPreference.getInstance(dataStore))
         )[MainViewModel::class.java]
 
-        mainViewModel.getUser().observe(this, { user ->
-            if (user.isLogin){
+        mainViewModel.getUser().observe(this) { user ->
+            if (user.apiToken.isNotEmpty() || user.apiToken != "") {
                 binding.nameTextView.text = getString(R.string.greeting, user.name)
             } else {
                 startActivity(Intent(this, WelcomeActivity::class.java))
                 finish()
             }
-        })
+        }
     }
 
     private fun setupAction() {
@@ -74,13 +74,19 @@ class MainActivity : AppCompatActivity() {
 
     private fun playAnimation() {
         ObjectAnimator.ofFloat(binding.imageView, View.TRANSLATION_X, -30f, 30f).apply {
-            duration = 6000
+            duration = 5000
+            repeatCount = ObjectAnimator.INFINITE
+            repeatMode = ObjectAnimator.REVERSE
+        }.start()
+        ObjectAnimator.ofFloat(binding.imageView, View.TRANSLATION_Y, -10f, 10f).apply {
+            duration = 4000
             repeatCount = ObjectAnimator.INFINITE
             repeatMode = ObjectAnimator.REVERSE
         }.start()
 
         val name = ObjectAnimator.ofFloat(binding.nameTextView, View.ALPHA, 1f).setDuration(500)
-        val message = ObjectAnimator.ofFloat(binding.messageTextView, View.ALPHA, 1f).setDuration(500)
+        val message =
+            ObjectAnimator.ofFloat(binding.messageTextView, View.ALPHA, 1f).setDuration(500)
         val logout = ObjectAnimator.ofFloat(binding.logoutButton, View.ALPHA, 1f).setDuration(500)
 
         AnimatorSet().apply {

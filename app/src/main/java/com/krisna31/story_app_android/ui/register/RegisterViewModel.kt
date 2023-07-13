@@ -18,7 +18,7 @@ class RegisterViewModel(private val pref: UserPreference) : ViewModel() {
     private val _errorMessage = MutableLiveData<String?>()
     val errorMessage: MutableLiveData<String?> = _errorMessage
 
-    fun saveUser(user: UserModel) {
+    fun register(user: UserModel) {
         _isLoading.value = true
         val registerRequest =
             ApiConfig.getApiService().register(user.name, user.email, user.password)
