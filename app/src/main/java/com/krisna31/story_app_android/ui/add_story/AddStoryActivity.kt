@@ -1,7 +1,6 @@
 package com.krisna31.story_app_android.ui.add_story
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.Intent.ACTION_GET_CONTENT
 import android.content.pm.PackageManager
@@ -106,7 +105,6 @@ class AddStoryActivity : AppCompatActivity() {
         launcherIntentGallery.launch(chooser)
     }
 
-    @SuppressLint("QueryPermissionsNeeded")
     private fun startTakePhoto() {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         intent.resolveActivity(packageManager)
@@ -114,7 +112,7 @@ class AddStoryActivity : AppCompatActivity() {
         createCustomTempFile(application).also {
             val photoURI: Uri = FileProvider.getUriForFile(
                 this@AddStoryActivity,
-                "com.krisna31.story_app_android.mycamera",
+                "com.krisna31.story_app_android",
                 it
             )
             currentPhotoPath = it.absolutePath
@@ -155,8 +153,6 @@ class AddStoryActivity : AppCompatActivity() {
         if (it.resultCode == RESULT_OK) {
             val myFile = File(currentPhotoPath)
             myFile.let { file ->
-//              Silakan gunakan kode ini jika mengalami perubahan rotasi
-//              rotateFile(file)
                 getFile = file
                 binding.previewImageView.setImageBitmap(BitmapFactory.decodeFile(file.path))
             }
