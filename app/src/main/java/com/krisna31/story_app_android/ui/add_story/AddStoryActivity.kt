@@ -177,8 +177,9 @@ class AddStoryActivity : AppCompatActivity() {
         if (getFile != null) {
             val file = reduceFileImage(getFile as File)
 
+
             val description =
-                "Ini adalah deksripsi gambar".toRequestBody("text/plain".toMediaType())
+                binding.etDeskripsi.text.toString().toRequestBody("text/plain".toMediaType())
             val requestImageFile = file.asRequestBody("image/jpeg".toMediaType())
             val imageMultipart: MultipartBody.Part = MultipartBody.Part.createFormData(
                 "photo",

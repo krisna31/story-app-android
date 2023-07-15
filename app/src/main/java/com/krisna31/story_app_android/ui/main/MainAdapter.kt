@@ -32,7 +32,7 @@ class MainAdapter : ListAdapter<ListStoryItem, MainAdapter.MyViewHolder>(DIFF_CA
                 .load(storyItem.photoUrl)
                 .into(binding.ivStory)
             binding.tvOwner.text = storyItem.name
-            binding.tvDeskripsi.text = trimString(storyItem.description)
+            binding.tvDeskripsi.text = addEllipsisAfterWords(storyItem.description)
             binding.root.setOnClickListener {
                 val intent = Intent(itemView.context, DetailStoryActivity::class.java)
                 val optionsCompat: ActivityOptionsCompat =
@@ -50,11 +50,15 @@ class MainAdapter : ListAdapter<ListStoryItem, MainAdapter.MyViewHolder>(DIFF_CA
             }
         }
 
-        private fun trimString(desc: String): String {
-            return if (desc.length >= 25)
-                desc.slice(0..25) + "..."
-            else
-                desc
+        private fun addEllipsisAfterWords(text: String, maxWords: Int = 10): String {
+            val words = text.split(" ")
+            return if (words.size > maxWords) {
+                val slicedWords = words.subList(0, maxWords)
+                val shortenedText = slicedWords.joinToString(" ")
+                "$shortenedText..."
+            } else {
+                text
+            }
         }
     }
 
