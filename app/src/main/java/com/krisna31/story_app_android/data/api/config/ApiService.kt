@@ -1,9 +1,12 @@
 package com.krisna31.story_app_android.data.api.config
 
+import com.krisna31.story_app_android.data.api.response.AddStoryResponse
 import com.krisna31.story_app_android.data.api.response.DetailStoryResponse
 import com.krisna31.story_app_android.data.api.response.LoginResponse
 import com.krisna31.story_app_android.data.api.response.RegisterResponse
 import com.krisna31.story_app_android.data.api.response.StoryResponse
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -40,4 +43,12 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Path("id") id: String,
     ): Call<DetailStoryResponse>
+
+    @Multipart
+    @POST("stories")
+    fun addStory(
+        @Header("Authorization") token: String,
+        @Part("description") description: RequestBody,
+        @Part file: MultipartBody.Part,
+    ): Call<AddStoryResponse>
 }

@@ -18,6 +18,7 @@ import com.krisna31.story_app_android.R
 import com.krisna31.story_app_android.data.user.UserPreference
 import com.krisna31.story_app_android.databinding.ActivityMainBinding
 import com.krisna31.story_app_android.ui.ViewModelFactory
+import com.krisna31.story_app_android.ui.add_story.AddStoryActivity
 import com.krisna31.story_app_android.ui.welcome.WelcomeActivity
 
 public val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
@@ -33,6 +34,13 @@ class MainActivity : AppCompatActivity() {
 
         setupView()
         setupViewModel()
+        setupAction()
+    }
+
+    private fun setupAction() {
+        binding.fabAddStory.setOnClickListener {
+            startActivity(Intent(this, AddStoryActivity::class.java))
+        }
     }
 
     private fun setupView() {
