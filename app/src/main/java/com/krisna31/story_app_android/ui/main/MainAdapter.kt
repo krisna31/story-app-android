@@ -30,17 +30,17 @@ class MainAdapter : ListAdapter<ListStoryItem, MainAdapter.MyViewHolder>(DIFF_CA
         fun bind(storyItem: ListStoryItem) {
             Glide.with(itemView.context)
                 .load(storyItem.photoUrl)
-                .into(binding.ivStory)
-            binding.tvOwner.text = storyItem.name
-            binding.tvDeskripsi.text = addEllipsisAfterWords(storyItem.description)
+                .into(binding.ivItemPhoto)
+            binding.tvItemName.text = storyItem.name
+            binding.tvItemDeskripsi.text = addEllipsisAfterWords(storyItem.description)
             binding.root.setOnClickListener {
                 val intent = Intent(itemView.context, DetailStoryActivity::class.java)
                 val optionsCompat: ActivityOptionsCompat =
                     ActivityOptionsCompat.makeSceneTransitionAnimation(
                         itemView.context as Activity,
-                        Pair(binding.ivStory, "photo"),
-                        Pair(binding.tvOwner, "name"),
-                        Pair(binding.tvDeskripsi, "desc"),
+                        Pair(binding.ivItemPhoto, "photo"),
+                        Pair(binding.tvItemName, "name"),
+                        Pair(binding.tvItemDeskripsi, "desc"),
                     )
                 intent.putExtra(DetailStoryActivity.EXTRA_STORY, storyItem.id)
                 itemView.context.startActivity(

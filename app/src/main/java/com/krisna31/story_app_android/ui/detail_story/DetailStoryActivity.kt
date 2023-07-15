@@ -42,13 +42,13 @@ class DetailStoryActivity : AppCompatActivity() {
             if (user.apiToken.isNotEmpty() || user.apiToken != "") {
                 detailStoryViewModel.getStory(user.apiToken, intent.getStringExtra(EXTRA_STORY)!!)
                 detailStoryViewModel.story.observe(this) { story ->
-                    detailStoryBinding.tvOwner.text = story.name
-                    detailStoryBinding.tvDeskripsi.text = story.description
+                    detailStoryBinding.tvDetailName.text = story.name
+                    detailStoryBinding.tvDetailDescription.text = story.description
                     Glide
                         .with(this)
                         .load(story.photoUrl)
                         .centerCrop()
-                        .into(detailStoryBinding.ivStory)
+                        .into(detailStoryBinding.ivDetailPhoto)
                 }
                 detailStoryViewModel.isLoading.observe(this) { isLoading ->
                     showLoading(isLoading)

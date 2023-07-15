@@ -44,7 +44,7 @@
         app:layout_constraintTop_toBottomOf="@+id/previewImageView">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etDeskripsi"
+            android:id="@+id/ed_add_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/masukkan_cerita_anda" />
@@ -76,7 +76,7 @@
         app:layout_constraintTop_toTopOf="@+id/cameraButton" />
 
     <Button
-        android:id="@+id/uploadButton"
+        android:id="@+id/button_add"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
