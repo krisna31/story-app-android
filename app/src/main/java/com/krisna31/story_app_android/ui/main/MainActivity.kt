@@ -20,7 +20,7 @@ import com.krisna31.story_app_android.databinding.ActivityMainBinding
 import com.krisna31.story_app_android.ui.ViewModelFactory
 import com.krisna31.story_app_android.ui.welcome.WelcomeActivity
 
-private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
+public val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
 class MainActivity : AppCompatActivity() {
     private lateinit var mainViewModel: MainViewModel

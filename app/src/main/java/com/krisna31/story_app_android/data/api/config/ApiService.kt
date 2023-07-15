@@ -1,5 +1,6 @@
 package com.krisna31.story_app_android.data.api.config
 
+import com.krisna31.story_app_android.data.api.response.DetailStoryResponse
 import com.krisna31.story_app_android.data.api.response.LoginResponse
 import com.krisna31.story_app_android.data.api.response.RegisterResponse
 import com.krisna31.story_app_android.data.api.response.StoryResponse
@@ -38,5 +39,5 @@ interface ApiService {
     fun getStory(
         @Header("Authorization") token: String,
         @Path("id") id: String,
-    ): Call<StoryResponse>
+    ): Call<DetailStoryResponse>
 }
