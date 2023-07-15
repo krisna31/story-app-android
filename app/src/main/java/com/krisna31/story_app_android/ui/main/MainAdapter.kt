@@ -1,9 +1,12 @@
 package com.krisna31.story_app_android.ui.main
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.app.ActivityOptionsCompat
+import androidx.core.util.Pair
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -32,8 +35,18 @@ class MainAdapter : ListAdapter<ListStoryItem, MainAdapter.MyViewHolder>(DIFF_CA
             binding.tvDeskripsi.text = trimString(storyItem.description)
             binding.root.setOnClickListener {
                 val intent = Intent(itemView.context, DetailStoryActivity::class.java)
+                val optionsCompat: ActivityOptionsCompat =
+                    ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        itemView.context as Activity,
+                        Pair(binding.ivStory, "photo"),
+                        Pair(binding.tvOwner, "name"),
+                        Pair(binding.tvDeskripsi, "desc"),
+                    )
                 intent.putExtra(DetailStoryActivity.EXTRA_STORY, storyItem.id)
-                itemView.context.startActivity(intent)
+                itemView.context.startActivity(
+                    intent,
+                    optionsCompat.toBundle()
+                )
             }
         }
 
