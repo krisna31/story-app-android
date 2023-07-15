@@ -1,6 +1,7 @@
 package com.krisna31.story_app_android.ui.main
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.krisna31.story_app_android.data.api.response.ListStoryItem
 import com.krisna31.story_app_android.databinding.ItemsStoryBinding
+import com.krisna31.story_app_android.ui.detail_story.DetailStoryActivity
 
 class MainAdapter : ListAdapter<ListStoryItem, MainAdapter.MyViewHolder>(DIFF_CALLBACK) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -27,11 +29,19 @@ class MainAdapter : ListAdapter<ListStoryItem, MainAdapter.MyViewHolder>(DIFF_CA
                 .load(storyItem.photoUrl)
                 .into(binding.ivStory)
             binding.tvOwner.text = storyItem.name
+            binding.tvDeskripsi.text = trimString(storyItem.description)
             binding.root.setOnClickListener {
-//                val intent = Intent(itemView.context, DetailUserActivity::class.java)
-//                intent.putExtra(DetailUserActivity.EXTRA_USERNAME, userItem.login)
-//                itemView.context.startActivity(intent)
+                val intent = Intent(itemView.context, DetailStoryActivity::class.java)
+                intent.putExtra(DetailStoryActivity.EXTRA_STORY, storyItem.id)
+                itemView.context.startActivity(intent)
             }
+        }
+
+        private fun trimString(desc: String): String {
+            return if (desc.length >= 25)
+                desc.slice(0..25) + "..."
+            else
+                desc
         }
     }
 

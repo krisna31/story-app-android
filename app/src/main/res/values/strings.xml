@@ -17,5 +17,6 @@
     <string name="logout">Keluar</string>
     <string name="login_desc">Login Image</string>
     <string name="logout_from_app">Logout From App</string>
+    <string name="main_desc">%1$s…</string>
     <string name="add_story">Add Story</string>
 </resources>

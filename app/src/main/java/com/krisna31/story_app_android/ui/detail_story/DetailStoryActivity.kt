@@ -12,6 +12,10 @@ class DetailStoryActivity : AppCompatActivity() {
         detailStoryBinding = ActivityDetailStoryBinding.inflate(layoutInflater)
         setContentView(detailStoryBinding.root)
 
-        
+        val story = intent.getStringExtra(EXTRA_STORY)
+    }
+
+    companion object {
+        const val EXTRA_STORY = "EXTRA_STORY"
     }
 }
