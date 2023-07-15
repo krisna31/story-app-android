@@ -5,6 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -34,8 +36,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupView() {
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.title = getString(R.string.main_app_name)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         val layoutManager = LinearLayoutManager(this)
         binding.rvStory.layoutManager = layoutManager
         val itemDecoration = DividerItemDecoration(this, layoutManager.orientation)
@@ -50,11 +52,25 @@ class MainActivity : AppCompatActivity() {
 
         mainViewModel.getUser().observe(this) { user ->
             if (user.apiToken.isNotEmpty() || user.apiToken != "") {
-                mainViewModel.getStories()
+                mainViewModel.getStories(user.apiToken)
                 mainViewModel.story.observe(this) { story ->
                     val adapter = MainAdapter()
                     adapter.submitList(story)
                     binding.rvStory.adapter = adapter
+                }
+                mainViewModel.isLoading.observe(this) { isLoading ->
+                    showLoading(isLoading)
+                }
+                mainViewModel.errorMessage.observe(this) {
+                    if (it != null) {
+                        AlertDialog.Builder(this).apply {
+                            setTitle("Oops!")
+                            setMessage(it)
+                            setPositiveButton("OK") { _, _ -> }
+                            create()
+                            show()
+                        }
+                    }
                 }
             } else {
                 startActivity(Intent(this, WelcomeActivity::class.java))
@@ -71,15 +87,36 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.logoutButton -> {
-                mainViewModel.logout()
-                startActivity(Intent(this, WelcomeActivity::class.java))
-                finish()
+                AlertDialog.Builder(this).apply {
+                    setTitle("Yakin Logout?")
+                    setPositiveButton("Yakin") { _, _ ->
+                        mainViewModel.logout()
+                        val intent = Intent(context, WelcomeActivity::class.java)
+                        intent.flags =
+                            Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                        startActivity(intent)
+                        finish()
+                    }
+                    setNegativeButton("Batal") { dialog, _ ->
+                        dialog.cancel()
+                    }
+                    create()
+                    show()
+                }
                 return true
             }
 
             else -> {
                 return super.onOptionsItemSelected(item)
             }
+        }
+    }
+
+    private fun showLoading(state: Boolean) {
+        if (state) {
+            binding.progressBar.visibility = View.VISIBLE
+        } else {
+            binding.progressBar.visibility = View.GONE
         }
     }
 }

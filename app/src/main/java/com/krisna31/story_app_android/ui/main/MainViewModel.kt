@@ -33,10 +33,9 @@ class MainViewModel(private val pref: UserPreference) : ViewModel() {
         }
     }
 
-    fun getStories() {
+    fun getStories(apiToken: String) {
         _isLoading.value = true
-        val apiToken = pref.getApiToken().asLiveData().toString()
-        val storyRequest = ApiConfig.getApiService().getStories(apiToken)
+        val storyRequest = ApiConfig.getApiService().getStories("Bearer $apiToken")
         storyRequest.enqueue(object : retrofit2.Callback<StoryResponse> {
             override fun onResponse(
                 call: retrofit2.Call<StoryResponse>,
