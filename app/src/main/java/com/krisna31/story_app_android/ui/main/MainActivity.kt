@@ -19,6 +19,7 @@ import com.krisna31.story_app_android.data.user.UserPreference
 import com.krisna31.story_app_android.databinding.ActivityMainBinding
 import com.krisna31.story_app_android.ui.ViewModelFactory
 import com.krisna31.story_app_android.ui.add_story.AddStoryActivity
+import com.krisna31.story_app_android.ui.maps.MapsActivity
 import com.krisna31.story_app_android.ui.welcome.WelcomeActivity
 
 public val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
@@ -111,6 +112,11 @@ class MainActivity : AppCompatActivity() {
                     create()
                     show()
                 }
+                return true
+            }
+
+            R.id.mapsButton -> {
+                startActivity(Intent(this, MapsActivity::class.java))
                 return true
             }
 
