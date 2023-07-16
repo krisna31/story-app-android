@@ -13,24 +13,14 @@ class UserPreference private constructor(private val dataStore: DataStore<Prefer
         return dataStore.data.map { preferences ->
             UserModel(
                 preferences[NAME_KEY] ?: "",
-                preferences[EMAIL_KEY] ?: "",
-                preferences[PASSWORD_KEY] ?: "",
                 preferences[API_TOKEN_KEY] ?: ""
             )
-        }
-    }
-
-    fun getApiToken(): Flow<String> {
-        return dataStore.data.map { preferences ->
-            preferences[API_TOKEN_KEY] ?: ""
         }
     }
 
     suspend fun saveUser(user: UserModel) {
         dataStore.edit { preferences ->
             preferences[NAME_KEY] = user.name
-            preferences[EMAIL_KEY] = user.email
-            preferences[PASSWORD_KEY] = user.password
             preferences[API_TOKEN_KEY] = user.apiToken
         }
     }
@@ -44,6 +34,7 @@ class UserPreference private constructor(private val dataStore: DataStore<Prefer
     suspend fun logout() {
         dataStore.edit { preferences ->
             preferences[API_TOKEN_KEY] = ""
+            preferences[NAME_KEY] = ""
         }
     }
 
@@ -52,8 +43,6 @@ class UserPreference private constructor(private val dataStore: DataStore<Prefer
         private var INSTANCE: UserPreference? = null
 
         private val NAME_KEY = stringPreferencesKey("name")
-        private val EMAIL_KEY = stringPreferencesKey("email")
-        private val PASSWORD_KEY = stringPreferencesKey("password")
         private val API_TOKEN_KEY = stringPreferencesKey("apiToken")
 
         fun getInstance(dataStore: DataStore<Preferences>): UserPreference {

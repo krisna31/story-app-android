@@ -14,7 +14,6 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
-import com.krisna31.story_app_android.data.user.UserModel
 import com.krisna31.story_app_android.data.user.UserPreference
 import com.krisna31.story_app_android.databinding.ActivityRegisterBinding
 import com.krisna31.story_app_android.ui.ViewModelFactory
@@ -75,7 +74,7 @@ class RegisterActivity : AppCompatActivity() {
                 }
 
                 else -> {
-                    registerViewModel.register(UserModel(name, email, password, ""))
+                    registerViewModel.register(name, email, password)
                     registerViewModel.isLoading.observe(this) {
                         showLoading(it)
                     }

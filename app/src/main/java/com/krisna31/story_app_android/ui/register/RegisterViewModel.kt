@@ -1,6 +1,5 @@
 package com.krisna31.story_app_android.ui.register
 
-import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -18,10 +17,10 @@ class RegisterViewModel(private val pref: UserPreference) : ViewModel() {
     private val _errorMessage = MutableLiveData<String?>()
     val errorMessage: MutableLiveData<String?> = _errorMessage
 
-    fun register(user: UserModel) {
+    fun register(name: String, email: String, password: String) {
         _isLoading.value = true
         val registerRequest =
-            ApiConfig.getApiService().register(user.name, user.email, user.password)
+            ApiConfig.getApiService().register(name, email, password)
         registerRequest.enqueue(object : retrofit2.Callback<RegisterResponse> {
             override fun onResponse(
                 call: retrofit2.Call<RegisterResponse>,
@@ -33,7 +32,7 @@ class RegisterViewModel(private val pref: UserPreference) : ViewModel() {
                     val body = response.body()
                     if (body != null) {
                         viewModelScope.launch {
-                            pref.saveUser(user)
+                            pref.saveUser(UserModel(name, ""))
                         }
                     }
                 } else {

@@ -15,7 +15,6 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
-import com.krisna31.story_app_android.data.user.UserModel
 import com.krisna31.story_app_android.data.user.UserPreference
 import com.krisna31.story_app_android.databinding.ActivityLoginBinding
 import com.krisna31.story_app_android.ui.ViewModelFactory
@@ -26,7 +25,6 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
 class LoginActivity : AppCompatActivity() {
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var binding: ActivityLoginBinding
-    private lateinit var user: UserModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
