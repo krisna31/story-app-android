@@ -7,6 +7,7 @@ import com.krisna31.story_app_android.ui.add_story.AddStoryViewModel
 import com.krisna31.story_app_android.ui.detail_story.DetailStoryViewModel
 import com.krisna31.story_app_android.ui.login.LoginViewModel
 import com.krisna31.story_app_android.ui.main.MainViewModel
+import com.krisna31.story_app_android.ui.maps.MapsViewModel
 import com.krisna31.story_app_android.ui.register.RegisterViewModel
 
 class ViewModelFactory(private val pref: UserPreference) : ViewModelProvider.NewInstanceFactory() {
@@ -32,6 +33,10 @@ class ViewModelFactory(private val pref: UserPreference) : ViewModelProvider.New
 
             modelClass.isAssignableFrom(DetailStoryViewModel::class.java) -> {
                 DetailStoryViewModel(pref) as T
+            }
+
+            modelClass.isAssignableFrom(MapsViewModel::class.java) -> {
+                MapsViewModel(pref) as T
             }
 
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
