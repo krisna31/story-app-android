@@ -19,17 +19,11 @@ class MainViewModel(
 ) :
     ViewModel() {
 
-    private val _isLoading = MutableLiveData<Boolean>()
-    val isLoading: LiveData<Boolean> = _isLoading
-
     private val _errorMessage = MutableLiveData<String?>()
     val errorMessage: LiveData<String?> = _errorMessage
 
     private val _story = MutableLiveData<List<ListStoryItem>>()
     val story: LiveData<List<ListStoryItem>> = _story
-
-//    val stories: LiveData<PagingData<ListStoryItem>> =
-//        storyRepository.getStory().cachedIn(viewModelScope)
 
     fun getUser(): LiveData<UserModel> {
         return pref.getUser().asLiveData()
@@ -43,29 +37,6 @@ class MainViewModel(
 
     fun getStories(apiToken: String): LiveData<PagingData<ListStoryItem>> {
         return storyRepository.getStory(apiToken).cachedIn(viewModelScope)
-//        val storyRequest = ApiConfig.getApiService().getStories("Bearer $apiToken")
-//        storyRequest.enqueue(object : retrofit2.Callback<StoryResponse> {
-//            override fun onResponse(
-//                call: retrofit2.Call<StoryResponse>,
-//                response: retrofit2.Response<StoryResponse>
-//            ) {
-//                _isLoading.value = false
-//                if (response.isSuccessful) {
-//                    _errorMessage.value = null
-//                    val body = response.body()
-//                    if (body != null) {
-//                        _story.value = body.listStory
-//                    }
-//                } else {
-//                    _errorMessage.value = response.message()
-//                }
-//            }
-//
-//            override fun onFailure(call: retrofit2.Call<StoryResponse>, t: Throwable) {
-//                _isLoading.value = false
-//                _errorMessage.value = t.message
-//            }
-//        })
     }
 
 }
