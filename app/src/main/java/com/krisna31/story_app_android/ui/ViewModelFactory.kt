@@ -1,5 +1,6 @@
 package com.krisna31.story_app_android.ui
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.krisna31.story_app_android.data.user.UserPreference
@@ -9,14 +10,16 @@ import com.krisna31.story_app_android.ui.login.LoginViewModel
 import com.krisna31.story_app_android.ui.main.MainViewModel
 import com.krisna31.story_app_android.ui.maps.MapsViewModel
 import com.krisna31.story_app_android.ui.register.RegisterViewModel
+import com.krisna31.story_app_android.util.Injection
 
-class ViewModelFactory(private val pref: UserPreference) : ViewModelProvider.NewInstanceFactory() {
+class ViewModelFactory(private val pref: UserPreference, private val context: Context? = null) :
+    ViewModelProvider.NewInstanceFactory() {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return when {
             modelClass.isAssignableFrom(MainViewModel::class.java) -> {
-                MainViewModel(pref) as T
+                MainViewModel(pref, Injection.provideRepository(context)) as T
             }
 
             modelClass.isAssignableFrom(RegisterViewModel::class.java) -> {

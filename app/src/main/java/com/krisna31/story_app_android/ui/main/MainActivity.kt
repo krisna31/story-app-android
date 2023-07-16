@@ -55,32 +55,22 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupViewModel() {
         mainViewModel = ViewModelProvider(
-            this,
-            ViewModelFactory(UserPreference.getInstance(dataStore))
+            this@MainActivity,
+            ViewModelFactory(UserPreference.getInstance(dataStore), this@MainActivity)
         )[MainViewModel::class.java]
 
         mainViewModel.getUser().observe(this) { user ->
             if (user.apiToken.isNotEmpty() || user.apiToken != "") {
-                mainViewModel.getStories(user.apiToken)
-                mainViewModel.story.observe(this) { story ->
-                    val adapter = MainAdapter()
-                    adapter.submitList(story)
-                    binding.rvStory.adapter = adapter
-                }
-                mainViewModel.isLoading.observe(this) { isLoading ->
-                    showLoading(isLoading)
-                }
-                mainViewModel.errorMessage.observe(this) {
-                    if (it != null) {
-                        AlertDialog.Builder(this).apply {
-                            setTitle("Oops!")
-                            setMessage(it)
-                            setPositiveButton("OK") { _, _ -> }
-                            create()
-                            show()
-                        }
+                val adapter = MainAdapter()
+                binding.rvStory.adapter = adapter.withLoadStateFooter(
+                    footer = LoadingStateAdapter {
+                        adapter.retry()
                     }
+                )
+                mainViewModel.getStories(user.apiToken).observe(this) {
+                    adapter.submitData(lifecycle, it)
                 }
+                binding.progressBar.visibility = View.GONE
             } else {
                 startActivity(Intent(this, WelcomeActivity::class.java))
                 finish()

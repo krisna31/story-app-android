@@ -33,10 +33,10 @@ interface ApiService {
         @Field("password") password: String,
     ): Call<LoginResponse>
 
-    @GET("stories")
-    fun getStories(
-        @Header("Authorization") token: String,
-    ): Call<StoryResponse>
+//    @GET("stories")
+//    fun getStories(
+//        @Header("Authorization") token: String,
+//    ): Call<StoryResponse>
 
     @GET("stories/{id}")
     fun getStory(
@@ -56,4 +56,11 @@ interface ApiService {
     fun getStoriesOnlyLocation(
         @Header("Authorization") token: String,
     ): Call<StoryResponse>
+
+    @GET("stories")
+    suspend fun getStories(
+        @Query("page") page: Int,
+        @Query("size") size: Int,
+        @Header("Authorization") token: String,
+    ): StoryResponse
 }
