@@ -5,6 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.paging.AsyncPagingDataDiffer
 import androidx.paging.PagingData
 import com.krisna31.story_app_android.data.api.response.ListStoryItem
+import com.krisna31.story_app_android.data.paging_source.StoryRepository
+import com.krisna31.story_app_android.data.user.UserPreference
 import com.krisna31.story_app_android.utils.DataDummy
 import com.krisna31.story_app_android.utils.MainDispatcherRule
 import com.krisna31.story_app_android.utils.MyListUpdateCallback
@@ -22,7 +24,10 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Mockito
+import org.mockito.Mockito.mock
+import org.mockito.Mockito.never
+import org.mockito.Mockito.times
+import org.mockito.Mockito.verify
 import org.mockito.Mockito.`when`
 
 @ExperimentalCoroutinesApi
@@ -35,6 +40,8 @@ class MainViewModelTest {
     val mainDispatcherRule = MainDispatcherRule()
 
     private lateinit var mainViewModel: MainViewModel
+    private lateinit var preference: UserPreference
+    private lateinit var repository: StoryRepository
 
     private val testDispatcher = TestCoroutineDispatcher()
 
@@ -43,8 +50,9 @@ class MainViewModelTest {
     @Before
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
-        mainViewModel = Mockito.mock(MainViewModel::class.java)
-
+        preference = mock(UserPreference::class.java)
+        repository = mock(StoryRepository::class.java)
+        mainViewModel = MainViewModel(preference, repository)
     }
 
     @After
@@ -59,7 +67,7 @@ class MainViewModelTest {
             val data = MyPagingSource.snapshot(expectedStory)
             val stories = MutableLiveData<PagingData<ListStoryItem>>()
             stories.value = data
-            `when`(mainViewModel.getStories(apiToken)).thenReturn(stories)
+            `when`(repository.getStory(apiToken)).thenReturn(stories)
             val actualData = mainViewModel.getStories(apiToken).getOrAwaitValue()
 
             val asyncPagingDataDiffer = AsyncPagingDataDiffer(
@@ -71,13 +79,14 @@ class MainViewModelTest {
             asyncPagingDataDiffer.submitData(actualData)
             val storiesData = asyncPagingDataDiffer.snapshot().items
 
-            val expectedFirstDataId = expectedStory[0].id
-            val actualFirstDataId = storiesData[0].id
+            val expectedFirstData = expectedStory[0]
+            val actualFirstData = storiesData[0]
 
-            Mockito.verify(mainViewModel).getStories(apiToken)
+            verify(repository, times(1)).getStory(apiToken)
+            verify(preference, never()).getUser()
             Assert.assertNotNull(storiesData)
             assertEquals(expectedStory.size, storiesData.size)
-            assertEquals(expectedFirstDataId, actualFirstDataId)
+            assertEquals(expectedFirstData, actualFirstData)
         }
 
     @Test
@@ -87,7 +96,7 @@ class MainViewModelTest {
             val data = MyPagingSource.snapshot(expectedStory)
             val stories = MutableLiveData<PagingData<ListStoryItem>>()
             stories.value = data
-            `when`(mainViewModel.getStories(apiToken)).thenReturn(stories)
+            `when`(repository.getStory(apiToken)).thenReturn(stories)
             val actualData = mainViewModel.getStories(apiToken).getOrAwaitValue()
 
             val asyncPagingDataDiffer = AsyncPagingDataDiffer(
@@ -99,7 +108,8 @@ class MainViewModelTest {
             asyncPagingDataDiffer.submitData(actualData)
             val storiesData = asyncPagingDataDiffer.snapshot().items
 
-            Mockito.verify(mainViewModel).getStories(apiToken)
+            verify(repository).getStory(apiToken)
+            verify(preference, never()).getUser()
             Assert.assertNotNull(storiesData)
             Assert.assertEquals(0, storiesData.size)
         }
